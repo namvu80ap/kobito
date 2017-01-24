@@ -1,0 +1,9 @@
+
+
+jar {
+	baseName = 'kobito-ai'
+	version = '0.0.1-SNAPSHOT'
+}
+bootRepackage {
+	mainClass = 'com.org.kobito.mai.KobitoAiApplication'
+}

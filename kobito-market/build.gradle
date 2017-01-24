@@ -1,0 +1,8 @@
+
+jar {
+	baseName = 'kobito-market'
+	version = '0.0.1-SNAPSHOT'
+}
+bootRepackage {
+	mainClass = 'com.org.kobito.market.KobitoMarketApplication'
+}

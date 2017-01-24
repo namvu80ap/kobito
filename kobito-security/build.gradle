@@ -1,0 +1,6 @@
+
+jar {
+	baseName = 'kobito-secutiry'
+	version = '0.0.1-SNAPSHOT'
+}
+

@@ -1,60 +1,62 @@
+allprojects{
+  //task hello << { task -> println "I'm $task.project.name" }
+  group = 'com.kobito'
+  version = '0.0.1-SNAPSHOT'
+
+  apply plugin: 'eclipse'
+  apply plugin: 'idea'
+
+  task wrapper(type: Wrapper) {
+    gradleVersion = '3.2'
+  }
+}
+
 buildscript {
-	ext {
-		springBootVersion = '1.3.5.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
-	}
+  ext {
+    springBootVersion = '2.0.0.BUILD-SNAPSHOT'
+  }
+  repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+  }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'spring-boot' 
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+  apply plugin: 'org.springframework.boot'
 
-jar {
-	baseName = 'kobito'
-	version = '0.0.1-SNAPSHOT'
-}
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+  sourceCompatibility = 1.8
 
-repositories {
-	mavenCentral()
-}
+  repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/snapshot" }
+    maven { url "https://repo.spring.io/milestone" }
+  }
 
 
-dependencies {
-	compile('org.springframework.cloud:spring-cloud-starter')
-	compile('org.springframework.cloud:spring-cloud-starter-config')
-	compile('org.springframework.cloud:spring-cloud-config-server')
-	compile('org.springframework.cloud:spring-cloud-starter-eureka')
-	compile('org.springframework.cloud:spring-cloud-starter-eureka-server')
-	compile('org.springframework.boot:spring-boot-starter-log4j2')
-	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-}
+  dependencies {
+    compile('org.springframework.boot.experimental:spring-boot-starter-web-reactive') {
+      exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    compile "io.reactivex:rxnetty-common"
+    compile "io.reactivex:rxnetty-http"
+    compile "io.reactivex:rxjava-reactive-streams"
+    compile "io.projectreactor:reactor-core:3.0.3.RELEASE"
 
-//Exclude logback in all package for using log4j2
-configurations {
-	all*.exclude module : 'spring-boot-starter-logging'
-}
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+  }
 
-dependencyManagement {
-	imports { 
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Brixton.SR1" 
-	}
-}
-
-
-eclipse {
-	classpath {
-		 containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-		 containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-	}
-}
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.6'
+  dependencyManagement {
+    imports {
+      mavenBom "org.springframework.cloud:spring-cloud-dataflow-dependencies:1.1.1.BUILD-SNAPSHOT"
+      mavenBom "org.springframework.cloud:spring-cloud-task-dependencies:1.2.0.BUILD-SNAPSHOT"
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"
+      mavenBom "org.springframework.boot.experimental:spring-boot-dependencies-web-reactive:0.1.0.BUILD-SNAPSHOT"
+    }
+  }
 }

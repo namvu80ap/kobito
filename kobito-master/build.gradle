@@ -1,0 +1,8 @@
+
+jar {
+	baseName = 'kobito-master'
+	version = '0.0.1-SNAPSHOT'
+}
+bootRepackage {
+	mainClass = 'com.org.kobito.master.KobitoMasterApplication'
+}

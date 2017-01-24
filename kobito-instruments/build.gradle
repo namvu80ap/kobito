@@ -1,0 +1,7 @@
+jar {
+	baseName = 'kobito-instruments'
+	version = '0.0.1-SNAPSHOT'
+}
+bootRepackage {
+	mainClass = 'com.org.kobito.instruments.KobitoInstrumentsApplication'
+}
