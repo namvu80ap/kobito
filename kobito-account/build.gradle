@@ -4,6 +4,33 @@ jar {
 	version = '0.0.1-SNAPSHOT'
 }
 
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+	compileOnly "org.projectlombok:lombok:1.16.12"
+	compile("org.springframework.boot:spring-boot-starter-data-rest")
+//	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+
+//	compile('org.springframework.boot.experimental:spring-boot-starter-web-reactive') {
+//		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+//	}
+//	compile "io.reactivex:rxnetty-common"
+//	compile "io.reactivex:rxnetty-http"
+//	compile "io.reactivex:rxjava-reactive-streams:1.2.0"
+	compile "io.projectreactor:reactor-core:3.0.3.RELEASE"
+
+	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+
+dependencyManagement {
+	imports {
+		//mavenBom "org.springframework.cloud:spring-cloud-dataflow-dependencies:1.1.1.BUILD-SNAPSHOT"
+		//mavenBom "org.springframework.cloud:spring-cloud-task-dependencies:1.2.0.BUILD-SNAPSHOT"
+		//mavenBom "org.springframework.cloud:spring-cloud-dependencies:Dalston.BUILD-SNAPSHOT"
+//		mavenBom "org.springframework.boot.experimental:spring-boot-dependencies-web-reactive:0.1.0.BUILD-SNAPSHOT"
+	}
+}
+
 // Prevents common subproject dependencies from being included in the common jar itself.
 // Without this, each subproject that included common would include each shared dependency twice.
 bootRepackage {

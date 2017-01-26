@@ -1,0 +1,34 @@
+#In production server, for overriding this profiles config, gragle should run with : bootRun -Dspring.profiles.active=production
+spring:
+  profiles:
+    active: development
+
+#Production env default config
+---
+spring:
+  profiles: produciton
+  data:
+      cassandra:
+        port: 9042
+        keyspace-name: mykeyspace
+        contact-points: localhost
+server:
+  address: localhost
+#Logging configure
+logging:
+  config: 'classpath:log4j2.yml'
+
+#Development env default config
+---
+spring:
+  profiles: development
+  data:
+    cassandra:
+      port: 9042
+      keyspace-name: mykeyspace
+      contact-points: localhost
+server:
+  address: localhost
+#Logging configure
+logging:
+  config: 'classpath:log4j2_dev.yml'
