@@ -6,14 +6,15 @@ spring:
 #Production env default config
 ---
 spring:
-  profiles: produciton
+  profiles: production
   data:
-      cassandra:
-        port: 9042
-        keyspace-name: mykeyspace
-        contact-points: localhost
+    cassandra:
+      port: 9042
+      keyspace-name: mykeyspace
+      contact-points: localhost
 server:
   address: localhost
+  port: 8081
 #Logging configure
 logging:
   config: 'classpath:log4j2.yml'
@@ -29,6 +30,7 @@ spring:
       contact-points: localhost
 server:
   address: localhost
+  port: 8080
 #Logging configure
 logging:
   config: 'classpath:log4j2_dev.yml'

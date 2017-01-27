@@ -36,16 +36,4 @@ subprojects {
   }
 
 
-  //Common project's dependencies
-  dependencies {
-    compile('org.springframework.boot:spring-boot-starter-log4j2')
-    compile('com.fasterxml.jackson.core:jackson-databind')
-    compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
-  }
-
-  //Exclude logback in all package for using log4j2
-  configurations {
-    all*.exclude module : 'spring-boot-starter-logging'
-  }
-
 }

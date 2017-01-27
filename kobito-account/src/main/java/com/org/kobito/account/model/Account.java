@@ -18,7 +18,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-
 public class Account {
 
     private String firstname;
@@ -26,6 +25,6 @@ public class Account {
     private String lastname;
 
     @PrimaryKey
-    private String id;
+    private UUID id;
 
 }

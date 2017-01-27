@@ -9,8 +9,8 @@ Configuration:
         Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
     RollingRandomAccessFile:
       name: RollingRandomAccessFile
-      fileName: 'logs/leonword.log'
-      filePattern: 'logs/leonword-%d{yyyy-MM-dd}-%i.log.gz'
+      fileName: 'logs/kobito-account.log'
+      filePattern: 'logs/kobito-account-%d{yyyy-MM-dd}-%i.log.gz'
       PatternLayout:
         Pattern: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
       Policies:
