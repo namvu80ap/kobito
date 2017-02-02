@@ -1,0 +1,6 @@
+server:
+  address: localhost
+  port: 8080
+#Logging configure
+logging:
+  config: 'classpath:log4j2_dev.yml'
