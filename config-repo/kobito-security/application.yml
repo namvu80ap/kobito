@@ -1,0 +1,26 @@
+#In production server, for overriding this profiles config, gragle should run with : bootRun -Dspring.profiles.active=production
+spring:
+  profiles:
+    active: development
+
+#Production env default config
+---
+spring:
+  profiles: production
+server:
+  address: localhost
+  port: 8081
+#Logging configure
+logging:
+  config: 'classpath:log4j2.yml'
+
+#Development env default config
+---
+spring:
+  profiles: development
+server:
+  address: localhost
+  port: 8080
+#Logging configure
+logging:
+  config: 'classpath:log4j2_dev.yml'
