@@ -12,12 +12,12 @@ dependencies {
 //	compile "org.springframework.boot:spring-boot-starter-web"
 //	compile("org.springframework.boot:spring-boot-starter-data-rest")
 //	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-
-	compile('org.springframework.boot.experimental:spring-boot-starter-web-reactive') {
+//	compile "org.springframework.boot:spring-boot-starter-webflux"
+	compile('org.springframework.boot:spring-boot-starter-webflux') {
 		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 	}
-	compile "io.reactivex:rxnetty-common"
-	compile "io.reactivex:rxnetty-http"
+	compile "io.reactivex:rxnetty-common:0.5.2-RC1"
+	compile "io.reactivex:rxnetty-http:0.5.2-RC1"
 	compile "io.reactivex:rxjava-reactive-streams:1.2.0"
 
 
@@ -28,6 +28,7 @@ dependencies {
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
 
+apply plugin: "io.spring.dependency-management"
 
 dependencyManagement {
 	imports {
@@ -40,9 +41,9 @@ dependencyManagement {
 
 // Prevents common subproject dependencies from being included in the common jar itself.
 // Without this, each subproject that included common would include each shared dependency twice.
-bootRepackage {
-	mainClass = 'com.org.kobito.account.KobitoAccountApplication'
-}
+//bootRepackage {
+//	mainClass = 'com.org.kobito.account.KobitoAccountApplication'
+//}
 
 //Exclude logback in all package for using log4j2
 configurations {
