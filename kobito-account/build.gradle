@@ -9,6 +9,7 @@ dependencies {
 	compile "org.projectlombok:lombok:1.16.12"
 
 	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile("org.springframework.social:spring-social-twitter")
 	compile('org.springframework.boot:spring-boot-starter-log4j2')
 	compile('com.fasterxml.jackson.core:jackson-databind')
 	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')

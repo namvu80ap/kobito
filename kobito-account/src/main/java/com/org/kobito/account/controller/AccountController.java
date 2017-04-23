@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import org.springframework.social.connect.ConnectionRepository;
+import org.springframework.social.twitter.api.CursoredList;
+import org.springframework.social.twitter.api.Twitter;
+import org.springframework.social.twitter.api.TwitterProfile;
 
 /**
  * Created by v_nam on 2017/01/27.
@@ -20,6 +24,10 @@ public class AccountController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    private Twitter twitter;
+
+    private ConnectionRepository connectionRepository;
 
     @GetMapping("/account")
     Flux<Account> list(){
