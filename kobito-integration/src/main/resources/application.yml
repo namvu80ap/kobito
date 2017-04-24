@@ -42,7 +42,7 @@ spring:
       accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: localhost
-  port: 9090
+  port: 9091
 #Logging configure
 logging:
   config: 'classpath:log4j2_dev.yml'

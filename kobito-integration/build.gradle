@@ -2,5 +2,27 @@
 
 jar {
 	baseName = 'kobito-integration'
-	version = '0.0.1-SNAPSHOT'
+	version = "$kobitoVersion"
+}
+
+dependencies {
+	compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+	compile "org.projectlombok:lombok:1.16.12"
+
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+	compile("org.springframework.social:spring-social-twitter")
+	compile('org.springframework.boot:spring-boot-starter-log4j2')
+	compile('com.fasterxml.jackson.core:jackson-databind')
+	compile('com.fasterxml.jackson.dataformat:jackson-dataformat-yaml')
+
+	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+
+//Exclude logback in all package for using log4j2
+configurations {
+	all*.exclude module : 'spring-boot-starter-logging'
 }
