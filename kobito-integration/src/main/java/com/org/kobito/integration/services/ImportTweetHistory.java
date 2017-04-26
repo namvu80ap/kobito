@@ -9,15 +9,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.twitter.api.SearchResults;
-import org.springframework.social.twitter.api.StreamListener;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,7 +70,7 @@ public class ImportTweetHistory {
 
         tradeTweet.setProfileId(tweetTraderProfile.getId());
         BeanUtils.copyProperties( item, tradeTweet );
-        tradeTweetRepository.save(tradeTweet);
+        tradeTweetRepository.save(tradeTweet).subscribe();
 
         logger.info("FINISH SAVE TWEET: {}" , item.getId() );
     }

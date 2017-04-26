@@ -52,4 +52,4 @@ logging:
 kobito:
   config:
     twitter:
-      importTweetHistory: false
+      importTweetHistory: true

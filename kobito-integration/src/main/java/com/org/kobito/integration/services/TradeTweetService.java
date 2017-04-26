@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
  * Created by v_nam on 2017/04/26.
  */
 @Service
-public class TradeTwetService {
+public class TradeTweetService {
     @Autowired
     private Twitter twitter;
 
