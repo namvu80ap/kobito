@@ -1,5 +1,6 @@
 package com.org.kobito.integration.controller;
 
+import com.org.kobito.integration.model.TradeTweet;
 import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
@@ -39,5 +40,6 @@ public class TwitterController {
         }
         return tweets;
     }
+
 
 }

@@ -24,7 +24,10 @@ server:
 #Logging configure
 logging:
   config: 'classpath:log4j2.yml'
-
+kobito:
+  config:
+    twitter:
+      importTweetHistory: false
 #Development env default config
 ---
 spring:
@@ -46,3 +49,7 @@ server:
 #Logging configure
 logging:
   config: 'classpath:log4j2_dev.yml'
+kobito:
+  config:
+    twitter:
+      importTweetHistory: false
