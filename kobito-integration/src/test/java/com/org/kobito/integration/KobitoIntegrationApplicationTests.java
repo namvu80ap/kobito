@@ -17,7 +17,7 @@ public class KobitoIntegrationApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		Flux<TradeTweet> list = tradeTwetService.searchByCreatedAt();
+		Flux<TradeTweet> list = tradeTweetService.searchByCreatedAt();
 		list.subscribe(value -> System.out.println(value.getId()) );
 	}
 

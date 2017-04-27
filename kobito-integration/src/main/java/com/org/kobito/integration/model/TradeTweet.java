@@ -26,7 +26,7 @@ public class TradeTweet {
     private String tweetSource;
     private String text;
 
-    @PrimaryKeyColumn(name = "createdat", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "createdat", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private Date createdAt;
     private String fromUser;
     private String profileImageUrl;
@@ -42,6 +42,7 @@ public class TradeTweet {
     private boolean favorited;
     private Integer favoriteCount;
 
+    @PrimaryKeyColumn(name = "profileid", ordinal = 1, type = PrimaryKeyType.PARTITIONED )
     private long profileId;
 
 }

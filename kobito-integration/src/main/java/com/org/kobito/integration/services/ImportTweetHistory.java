@@ -32,6 +32,9 @@ public class ImportTweetHistory {
     @Autowired
     private TradeTweetRepository tradeTweetRepository;
 
+    @Value("${kobito.config.twitter.twitterTraders}")
+    private String[] twitterTraders;
+
     @Autowired
     private TweetTraderProfileRepository tweetTraderProfileRepository;
 
@@ -40,7 +43,6 @@ public class ImportTweetHistory {
         if(importTweetHistory){
 //            SearchResults results = twitter.searchOperations().search("SignalFactory until:2017-04-10", 10);
             List<Tweet> list = twitter.timelineOperations().getUserTimeline("SignalFactory",50);
-            logger.debug("ALL 1000 TWEET : {}" , list.size() );
             if( list != null )
             list.parallelStream().forEach( item -> saveTweet(item));
 
@@ -60,7 +62,7 @@ public class ImportTweetHistory {
         }
     }
 
-    private void saveTweet( Tweet item ){
+    public void saveTweet( Tweet item ){
         logger.debug("TWEET : id {} , date : {} , text : {}", item.getId(),item.getCreatedAt() ,item.getText() );
         TradeTweet tradeTweet = new TradeTweet();
         TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();

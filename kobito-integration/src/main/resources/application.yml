@@ -53,3 +53,5 @@ kobito:
   config:
     twitter:
       importTweetHistory: true
+      twitterTraders: SingalFactory,MAPSInvestments
+      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
