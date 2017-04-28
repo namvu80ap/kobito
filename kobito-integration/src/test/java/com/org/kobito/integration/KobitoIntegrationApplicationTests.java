@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+//@SpringBootTest
 public class KobitoIntegrationApplicationTests {
 	@Autowired
 	TradeTweetService tradeTweetService;

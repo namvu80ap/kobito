@@ -4,6 +4,7 @@ import com.org.kobito.integration.model.TradeTweet;
 import com.org.kobito.integration.model.TweetTraderProfile;
 import com.org.kobito.integration.repository.TradeTweetRepository;
 import com.org.kobito.integration.repository.TweetTraderProfileRepository;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by v_nam on 2017/04/25.
@@ -40,8 +44,8 @@ public class ImportTweetHistory {
 
     public void run() {
         logger.debug("TWITTER SERIVEC RUN");
-        if(importTweetHistory){
-//            SearchResults results = twitter.searchOperations().search("SignalFactory until:2017-04-10", 10);
+        if(importTweetHistory && ArrayUtils.isNotEmpty(twitterTraders) ){
+
             List<Tweet> list = twitter.timelineOperations().getUserTimeline("SignalFactory",50);
             if( list != null )
             list.parallelStream().forEach( item -> saveTweet(item));
@@ -62,13 +66,16 @@ public class ImportTweetHistory {
         }
     }
 
-    public void saveTweet( Tweet item ){
-        logger.debug("TWEET : id {} , date : {} , text : {}", item.getId(),item.getCreatedAt() ,item.getText() );
-        TradeTweet tradeTweet = new TradeTweet();
-        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
+    public void saveTweet( List<Tweet> items ){
+        tradeTweetRepository.save(
+                Flux.from(items).flatMap( i -> )
+        ).subcribe();
 
-        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
-        tweetTraderProfileRepository.save(tweetTraderProfile);
+        TradeTweet tradeTweet = new TradeTweet();
+
+//        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
+//        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
+//        tweetTraderProfileRepository.save(tweetTraderProfile);
 
         tradeTweet.setProfileId(tweetTraderProfile.getId());
         BeanUtils.copyProperties( item, tradeTweet );

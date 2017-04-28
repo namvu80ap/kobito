@@ -1,5 +1,5 @@
 rootProject.name = "kobito"
-include ":kobito-account"
+//include ":kobito-account"
 //include ":kobito-master"
 //include ":kobito-ai"
 //include ":kobito-instruments"
