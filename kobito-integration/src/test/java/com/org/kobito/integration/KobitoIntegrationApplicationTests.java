@@ -10,15 +10,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 
 @RunWith(SpringRunner.class)
-//@SpringBootTest
+@SpringBootTest
 public class KobitoIntegrationApplicationTests {
+
 	@Autowired
 	TradeTweetService tradeTweetService;
 
 	@Test
 	public void contextLoads() {
-		Flux<TradeTweet> list = tradeTweetService.searchByCreatedAt();
-		list.subscribe(value -> System.out.println(value.getId()) );
+		//Flux<TradeTweet> list = tradeTweetService.searchByCreatedAt();
+		//list.subscribe(value -> System.out.println(value.getId()) );
 	}
 
 }

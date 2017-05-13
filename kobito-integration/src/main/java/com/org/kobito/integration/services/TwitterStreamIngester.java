@@ -2,7 +2,6 @@ package com.org.kobito.integration.services;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.*;
@@ -35,7 +34,7 @@ public class TwitterStreamIngester implements StreamListener {
         FilterStreamParameters filterStreamParameters = new FilterStreamParameters();
 //        filterStreamParameters.follow(54227657);
 
-        filterStreamParameters.follow(14710799);
+//        filterStreamParameters.follow(14710799);
 //        twitter.streamingOperations().filter( filterStreamParameters , listeners);
         twitter.streamingOperations().filter( "#Forex", listeners);
         twitter.streamingOperations().filter( "#FX", listeners);
@@ -45,7 +44,7 @@ public class TwitterStreamIngester implements StreamListener {
 
     @PostConstruct
     public void afterPropertiesSet() throws Exception {
-        run();
+//        run();/
     }
 
     @Override
