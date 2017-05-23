@@ -28,6 +28,8 @@ kobito:
   config:
     twitter:
       importTweetHistory: false
+      twitterTraders: SingalFactory,MAPSInvestments
+      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
 #Development env default config
 ---
 spring:

@@ -44,7 +44,6 @@ public class ImportTweetHistory {
     private TweetTraderProfileRepository tweetTraderProfileRepository;
 
     public void run() {
-        logger.debug("TWITTER SERIVEC RUN");
         if(importTweetHistory && ArrayUtils.isNotEmpty(twitterTraders) ){
             Arrays.stream(twitterTraders).parallel().forEach(
                 item -> {
@@ -70,12 +69,11 @@ public class ImportTweetHistory {
     }
 
     public void saveTweet( List<Tweet> items ){
-//        tradeTweetRepository.save(
-//                Flux.from(items).flatMap( i -> )
-//        ).subcribe();
-
         items.parallelStream().forEach(
-            item -> logger.info("Save tweet: {}", item.getText())
+            item -> {
+                        logger.info("Save tweet: {}", item.getText());
+                        saveTweet(item);
+                    }
         );
     }
 
@@ -94,6 +92,8 @@ public class ImportTweetHistory {
 
     @PostConstruct
     public void afterPropertiesSet() throws Exception {
-//        run();
+        if(importTweetHistory){
+            run();
+        }
     }
 }
