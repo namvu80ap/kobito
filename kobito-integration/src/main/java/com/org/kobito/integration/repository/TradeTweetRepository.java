@@ -17,9 +17,9 @@ import java.util.concurrent.Future;
  * Created by v_nam on 2017/01/26.
  */
 @Repository
-public interface TradeTweetRepository extends ReactiveCrudRepository<TradeTweet, String> {
-//    Flux<TradeTweet> findByLastname(String lastname);
-    @Async
-    @Query("Select * from tradetweet where createdat>?0 ALLOW FILTERING ")
-    Flux<TradeTweet> findByCreatedAtAfter(Date date);
-}
+    public interface TradeTweetRepository extends ReactiveCrudRepository<TradeTweet, String> {
+    //    Flux<TradeTweet> findByLastname(String lastname);
+        @Async
+        @Query("Select * from tradetweet where createdat>?0 ALLOW FILTERING ")
+        Flux<TradeTweet> findByCreatedAtAfter(Date date);
+    }

@@ -1,10 +1,15 @@
 package com.org.kobito.integration.controller;
 
 import com.org.kobito.integration.model.TradeTweet;
+import com.org.kobito.integration.services.ImportTweetHistory;
+import com.org.kobito.integration.services.TwitterStreamListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.twitter.api.SearchResults;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
@@ -18,28 +23,45 @@ public class TwitterController {
 
     private final Twitter twitter;
 
+    @Autowired
+    ImportTweetHistory importTweetHistory;
+
+    @Autowired
+    TwitterStreamListener twitterStreamListener;
 
     @Inject
     public TwitterController(Twitter twitter) {
         this.twitter = twitter;
     }
 
-    @GetMapping("/search")
-    List<Tweet> search() {
-//        SearchResults results = twitter.searchOperations().search("#spring" );
-//        List<Tweet> listTweet = results.getTweets();
-        long senceId =  856413158214438912L;
-        long maxId = 856402327762345985L;
-        List<Tweet> tweets = null;
-        try {
-            tweets = twitter.timelineOperations().getUserTimeline("SignalFactory", 2,maxId,senceId);
 
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return tweets;
+    @GetMapping(value = "/importTweetHistory/{tweeterAccount}")
+    public String importTweetHistory( @PathVariable String tweeterAccount ) {
+
+        //Start import thread
+        Runnable importThread = () -> { importTweetHistory.importTweet(tweeterAccount); };
+        new Thread(importThread).start();
+
+        return "Success";
     }
 
+    @GetMapping(value = "/startTweetListener")
+    public String startTweetListener( ) {
 
+        //Start import thread
+        Runnable importThread = () -> { twitterStreamListener.run(); };
+        new Thread(importThread).start();
+
+        return "Success";
+    }
+
+    @GetMapping(value = "/stopTweetListener")
+    public String stopTweetListener( ) {
+
+        //Start import thread
+        Runnable importThread = () -> { twitterStreamListener.stop(); };
+        new Thread(importThread).start();
+
+        return "Success";
+    }
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.*;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.*;
 
@@ -15,47 +14,35 @@ import java.util.*;
  * Created by v_nam on 2017/04/24.
  */
 @Service
-public class TwitterStreamIngester implements StreamListener {
+public class TwitterStreamListener implements StreamListener {
 
-    private static final Logger logger = LogManager.getLogger(TwitterStreamIngester.class);
+    private static final Logger logger = LogManager.getLogger(TwitterStreamListener.class);
 
     @Inject
     private Twitter twitter;
 
-    @Value("${kobito.config.twitter.tradingWords}")
-    private String[] tradingWords;
+    private List<StreamListener> listeners = new ArrayList<>();
 
     @Autowired
-    private  ImportTweetHistory importTweetHistory;
+    private  TradeTweetService tradeTweetService;
 
     public void run() {
-        List<StreamListener> listeners = new ArrayList<>();
         listeners.add(this);
         FilterStreamParameters filterStreamParameters = new FilterStreamParameters();
-//        filterStreamParameters.follow(54227657);
-
-//        filterStreamParameters.follow(14710799);
-//        twitter.streamingOperations().filter( filterStreamParameters , listeners);
         twitter.streamingOperations().filter( "#Forex", listeners);
         twitter.streamingOperations().filter( "#FX", listeners);
-
-//        twitter.streamingOperations().sample(  listeners);
     }
 
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-//        run();/
+    public void stop() {
+        FilterStreamParameters filterStreamParameters = new FilterStreamParameters();
+        twitter.streamingOperations().filter ( "#Forex", null);
+        twitter.streamingOperations().filter( "#FX", null);
     }
 
     @Override
     public void onTweet(Tweet tweet) {
-        logger.info("FOREX NEWS : {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
-        if(tradingWords != null){
-            if( Arrays.stream(tradingWords).parallel().anyMatch(tweet.getText()::contains ) ){
-                logger.info("TRADE TWEET: {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
-                importTweetHistory.saveTweet(tweet);
-            }
-        }
+        logger.debug("FOREX NEWS : {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
+        tradeTweetService.saveTweet(tweet);
     }
 
     @Override
