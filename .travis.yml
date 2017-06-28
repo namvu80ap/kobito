@@ -2,3 +2,5 @@ language: java
 jdk: oraclejdk8
 before_install:
  - chmod +x gradlew
+ - apt-get install gradle
+ - gradle --version
