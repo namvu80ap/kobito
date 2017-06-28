@@ -4,7 +4,9 @@ import com.org.kobito.integration.model.TradeTweet;
 import com.org.kobito.integration.model.TweetTraderProfile;
 import com.org.kobito.integration.repository.TradeTweetRepository;
 import com.org.kobito.integration.repository.TweetTraderProfileRepository;
+import lombok.NonNull;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -28,72 +30,52 @@ public class ImportTweetHistory {
 
     private static final Logger logger = LogManager.getLogger(ImportTweetHistory.class);
 
-    @Value("${kobito.config.twitter.importTweetHistory}")
-    private Boolean importTweetHistory;
+    @Value("${kobito.config.twitter.importTweetPageSize}")
+    private Integer importTweetPageSize;
 
     @Autowired
     private Twitter twitter;
 
     @Autowired
-    private TradeTweetRepository tradeTweetRepository;
+    private TradeTweetService tradeTweetService;
 
-    @Value("${kobito.config.twitter.twitterTraders}")
-    private String[] twitterTraders;
+    @Autowired
+    private TradeTweetRepository tradeTweetRepository;
 
     @Autowired
     private TweetTraderProfileRepository tweetTraderProfileRepository;
 
-    public void run() {
-        if(importTweetHistory && ArrayUtils.isNotEmpty(twitterTraders) ){
-            Arrays.stream(twitterTraders).parallel().forEach(
-                item -> {
-                    logger.info("TwitterTrader : {} ", item);
-                    item = "@" + item;
-                    List<Tweet> list = twitter.timelineOperations().getUserTimeline(item.toString(),50);
-                    if(list != null)
-                        saveTweet(list);
-                    if(list != null && list.size() == 50){
-                        Tweet lastItem = list.get(49);
-                        while(lastItem!=null){
-                            List<Tweet> nextList = twitter.timelineOperations().getUserTimeline(item.toString(),50, 1, new Long(lastItem.getId()));
-                            saveTweet(list);
-                            if(nextList == null || nextList.size() < 50){
-                                break;
-                            }
-                            lastItem = nextList.get(49);
-                        }
-                    }
+    public void importTweet( @NonNull String tweetAccount ) {
+        logger.debug("TwitterTrader : {} ", tweetAccount);
+        List<Tweet> list = twitter.timelineOperations().getUserTimeline(tweetAccount,importTweetPageSize);
+        if(list != null)
+            saveTweet(list);
+        if(list != null && list.size() == importTweetPageSize){
+            Tweet lastItem = list.get(importTweetPageSize-1);
+            while(lastItem!=null){
+                List<Tweet> nextList = twitter.timelineOperations()
+                                              .getUserTimeline(tweetAccount, importTweetPageSize,
+                                                                1, new Long(lastItem.getId()));
+                saveTweet(nextList);
+                if(nextList == null || nextList.size() < importTweetPageSize){
+                    break;
                 }
-            );
+                lastItem = nextList.get(importTweetPageSize-1);
+            }
         }
     }
 
     public void saveTweet( List<Tweet> items ){
         items.parallelStream().forEach(
             item -> {
-                        logger.info("Save tweet: {}", item.getText());
-                        saveTweet(item);
+                        logger.info("Save tweet: Id {} , Text {}, Name {} " , item.getId(),
+                                    item.getText(), item.getUser().getName() );
+                        tradeTweetService.saveTweet(item);
                     }
         );
     }
 
-    public void saveTweet( Tweet item ){
 
-        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
-        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
-        tweetTraderProfileRepository.save(tweetTraderProfile);
 
-        TradeTweet tradeTweet = new TradeTweet();
-        tradeTweet.setProfileId(tweetTraderProfile.getId());
-        BeanUtils.copyProperties( item, tradeTweet );
-        tradeTweetRepository.save(tradeTweet).subscribe();
 
-    }
-
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-        if(importTweetHistory){
-            run();
-        }
-    }
 }

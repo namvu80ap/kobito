@@ -15,8 +15,10 @@ dependencies {
 	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
 	compile "org.springframework.boot:spring-boot-starter-log4j2"
 	compile "org.apache.commons:commons-lang3:3.5"
-
-	compile "org.tensorflow:tensorflow:1.2.0"
+	compile "org.apache.spark:spark-mllib_2.11:2.1.1"
+	compile "org.apache.spark:spark-sql_2.11:2.1.1"
+	compile "org.apache.spark:spark-core_2.11:2.1.1"
+	compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.9.0.pr3"
 
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
