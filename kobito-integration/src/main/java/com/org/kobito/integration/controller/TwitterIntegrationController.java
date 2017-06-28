@@ -19,7 +19,7 @@ import java.util.List;
  * Created by namvu on 17/04/24.
  */
 @RestController
-public class TwitterController {
+public class TwitterIntegrationController {
 
     private final Twitter twitter;
 
@@ -30,7 +30,7 @@ public class TwitterController {
     TwitterStreamListener twitterStreamListener;
 
     @Inject
-    public TwitterController(Twitter twitter) {
+    public TwitterIntegrationController(Twitter twitter) {
         this.twitter = twitter;
     }
 
@@ -55,13 +55,4 @@ public class TwitterController {
         return "Success";
     }
 
-    @GetMapping(value = "/stopTweetListener")
-    public String stopTweetListener( ) {
-
-        //Start import thread
-        Runnable importThread = () -> { twitterStreamListener.stop(); };
-        new Thread(importThread).start();
-
-        return "Success";
-    }
 }

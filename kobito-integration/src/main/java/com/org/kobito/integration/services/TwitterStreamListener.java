@@ -26,17 +26,15 @@ public class TwitterStreamListener implements StreamListener {
     @Autowired
     private  TradeTweetService tradeTweetService;
 
+    @Value("${kobito.config.twitter.twitterTradingHashtag}")
+    private String[] twitterTradingHashtag;
+
     public void run() {
         listeners.add(this);
         FilterStreamParameters filterStreamParameters = new FilterStreamParameters();
-        twitter.streamingOperations().filter( "#Forex", listeners);
-        twitter.streamingOperations().filter( "#FX", listeners);
-    }
-
-    public void stop() {
-        FilterStreamParameters filterStreamParameters = new FilterStreamParameters();
-        twitter.streamingOperations().filter ( "#Forex", null);
-        twitter.streamingOperations().filter( "#FX", null);
+        for ( String hashTag : twitterTradingHashtag ) {
+            twitter.streamingOperations().filter( hashTag, listeners);
+        }
     }
 
     @Override

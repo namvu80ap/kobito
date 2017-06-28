@@ -1,9 +1,9 @@
 package com.org.kobito.integration.services;
 
-import com.org.kobito.integration.model.CommonTweet;
+import com.org.kobito.integration.model.CommonFxTweet;
 import com.org.kobito.integration.model.TradeTweet;
 import com.org.kobito.integration.model.TweetTraderProfile;
-import com.org.kobito.integration.repository.CommonTweetRepository;
+import com.org.kobito.integration.repository.CommonFxTweetRepository;
 import com.org.kobito.integration.repository.TradeTweetRepository;
 import com.org.kobito.integration.repository.TweetTraderProfileRepository;
 import org.apache.logging.log4j.LogManager;
@@ -28,13 +28,17 @@ public class TradeTweetService {
     @Autowired
     private TradeTweetRepository tradeTweetRepository;
     @Autowired
-    private CommonTweetRepository commonTweetRepository;
+    private CommonFxTweetRepository commonTweetRepository;
     @Autowired
     private TweetTraderProfileRepository tweetTraderProfileRepository;
 
     @Value("${kobito.config.twitter.tradingWords}")
     private String[] tradingWords;
 
+    /**
+     * Save and divide into TradeTweet or CommonFxTweet
+     * @param tweet
+     */
     public void saveTweet( Tweet tweet ){
         if(tradingWords != null){
             if( Arrays.stream(tradingWords).parallel().anyMatch(tweet.getText()::contains ) ){
@@ -67,7 +71,7 @@ public class TradeTweetService {
         BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
         tweetTraderProfileRepository.save(tweetTraderProfile);
 
-        CommonTweet commonTweet = new CommonTweet();
+        CommonFxTweet commonTweet = new CommonFxTweet();
         commonTweet.setProfileId( item.getUser().getId());
         BeanUtils.copyProperties( item, commonTweet );
         commonTweetRepository.save(commonTweet).subscribe();

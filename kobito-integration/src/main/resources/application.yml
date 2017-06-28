@@ -28,7 +28,7 @@ kobito:
   config:
     twitter:
       importTweetPageSize: 50
-      twitterTraders: SingalFactory,MAPSInvestments
+      twitterTradingHashtag: "#FX,#Forex"
       tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
 #Development env default config
 ---
@@ -55,5 +55,5 @@ kobito:
   config:
     twitter:
       importTweetPageSize: 50
-      twitterTraders: SignalFactory,MAPSInvestments
+      twitterTradingHashtag: "#FX,#Forex"
       tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
