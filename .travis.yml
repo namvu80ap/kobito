@@ -6,3 +6,5 @@ cache:
     - $HOME/.gradle
 before_install:
  - chmod +x gradlew
+ - ./gradlew assemble
+ - ./gradlew check --debug
