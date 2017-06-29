@@ -16,7 +16,7 @@ dependencies {
 	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
 	compile "org.springframework.boot:spring-boot-starter-log4j2"
 	compile "org.apache.commons:commons-lang3:3.5"
-	testCompile "org.springframework.boot:spring-boot-starter-test"
+	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 }
 
 //Exclude logback in all package for using log4j2
