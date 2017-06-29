@@ -4,11 +4,13 @@ import com.org.kobito.integration.services.TradeTweetService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=35.187.212.33",
+		"spring.data.cassandra.keyspace-name=testkeyspace"})
 public class KobitoIntegrationApplicationTests {
 
 	@Autowired
