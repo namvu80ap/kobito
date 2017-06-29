@@ -9,7 +9,7 @@ spring:
   profiles: production
   data:
     cassandra:
-      port: 9042
+      port: 9043
       keyspace-name: mykeyspace
       contact-points: localhost
   social:
@@ -20,16 +20,14 @@ spring:
         accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: localhost
-  port: 8081
+  port: 8083
 #Logging configure
 logging:
   config: 'classpath:log4j2.yml'
 kobito:
   config:
     twitter:
-      importTweetPageSize: 50
-      twitterTradingHashtag: "#FX,#Forex"
-      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
+      importTweetHistory: false
 #Development env default config
 ---
 spring:
@@ -39,21 +37,15 @@ spring:
       port: 9042
       keyspace-name: mykeyspace
       contact-points: localhost
-  social:
-    twitter:
-      appId: WkEM9cJR22UoTpPENqEYycUXy
-      appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
-      accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
-      accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: localhost
-  port: 9091
+  port: 9093
 #Logging configure
 logging:
   config: 'classpath:log4j2_dev.yml'
-kobito:
-  config:
-    twitter:
-      importTweetPageSize: 50
-      twitterTradingHashtag: "#FX,#Forex"
-      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
+#kobito:
+#  config:
+#    twitter:
+#      importTweetHistory: true
+#      twitterTraders: SingalFactory,MAPSInvestments
+#      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips

@@ -4,6 +4,9 @@ import com.org.kobito.integration.model.TradeTweet;
 import com.org.kobito.integration.model.TweetTraderProfile;
 import com.org.kobito.integration.repository.TradeTweetRepository;
 import com.org.kobito.integration.repository.TweetTraderProfileRepository;
+import lombok.NonNull;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -12,8 +15,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by v_nam on 2017/04/25.
@@ -23,11 +30,14 @@ public class ImportTweetHistory {
 
     private static final Logger logger = LogManager.getLogger(ImportTweetHistory.class);
 
-    @Value("${kobito.config.twitter.importTweetHistory}")
-    private Boolean importTweetHistory;
+    @Value("${kobito.config.twitter.importTweetPageSize}")
+    private Integer importTweetPageSize;
 
     @Autowired
     private Twitter twitter;
+
+    @Autowired
+    private TradeTweetService tradeTweetService;
 
     @Autowired
     private TradeTweetRepository tradeTweetRepository;
@@ -35,48 +45,37 @@ public class ImportTweetHistory {
     @Autowired
     private TweetTraderProfileRepository tweetTraderProfileRepository;
 
-    public void run() {
-        logger.debug("TWITTER SERIVEC RUN");
-        if(importTweetHistory){
-//            SearchResults results = twitter.searchOperations().search("SignalFactory until:2017-04-10", 10);
-            List<Tweet> list = twitter.timelineOperations().getUserTimeline("SignalFactory",50);
-            logger.debug("ALL 1000 TWEET : {}" , list.size() );
-            if( list != null )
-            list.parallelStream().forEach( item -> saveTweet(item));
-
-            if( list != null && list.size() == 50 ){
-                Tweet lastItem = list.get(49);
-//                logger.debug("LAST TWEET : id {} , date : {} , text : {}", lastItem.getId(),lastItem.getCreatedAt() ,lastItem.getText() );
-                while(lastItem!=null){
-                    List<Tweet> nextList = twitter.timelineOperations().getUserTimeline("SignalFactory",50, 1, new Long( lastItem.getId() ) );
-                    logger.debug("ALL 1000 TWEET : {}" , list.size() );
-                    nextList.parallelStream().forEach( item ->  saveTweet(item) );
-                    if(nextList == null || nextList.size() < 50){
-                        break;
-                    }
-                    lastItem = nextList.get(49);
+    public void importTweet( @NonNull String tweetAccount ) {
+        logger.debug("TwitterTrader : {} ", tweetAccount);
+        List<Tweet> list = twitter.timelineOperations().getUserTimeline(tweetAccount,importTweetPageSize);
+        if(list != null)
+            saveTweet(list);
+        if(list != null && list.size() == importTweetPageSize){
+            Tweet lastItem = list.get(importTweetPageSize-1);
+            while(lastItem!=null){
+                List<Tweet> nextList = twitter.timelineOperations()
+                                              .getUserTimeline(tweetAccount, importTweetPageSize,
+                                                                1, new Long(lastItem.getId()));
+                saveTweet(nextList);
+                if(nextList == null || nextList.size() < importTweetPageSize){
+                    break;
                 }
+                lastItem = nextList.get(importTweetPageSize-1);
             }
         }
     }
 
-    private void saveTweet( Tweet item ){
-        logger.debug("TWEET : id {} , date : {} , text : {}", item.getId(),item.getCreatedAt() ,item.getText() );
-        TradeTweet tradeTweet = new TradeTweet();
-        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
-
-        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
-        tweetTraderProfileRepository.save(tweetTraderProfile);
-
-        tradeTweet.setProfileId(tweetTraderProfile.getId());
-        BeanUtils.copyProperties( item, tradeTweet );
-        tradeTweetRepository.save(tradeTweet).subscribe();
-
-        logger.info("FINISH SAVE TWEET: {}" , item.getId() );
+    public void saveTweet( List<Tweet> items ){
+        items.parallelStream().forEach(
+            item -> {
+                        logger.info("Save tweet: Id {} , Text {}, Name {} " , item.getId(),
+                                    item.getText(), item.getUser().getName() );
+                        tradeTweetService.saveTweet(item);
+                    }
+        );
     }
 
-    @PostConstruct
-    public void afterPropertiesSet() throws Exception {
-        run();
-    }
+
+
+
 }

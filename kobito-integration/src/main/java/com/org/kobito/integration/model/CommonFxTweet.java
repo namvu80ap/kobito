@@ -8,18 +8,17 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import org.springframework.data.cql.core.Ordering;
 import org.springframework.data.cql.core.PrimaryKeyType;
 
-
 import java.util.Date;
-import java.util.UUID;
 
 /**
- * Created by v_nam on 2017/04/25.
+ * Created by v_nam on 2017/06/27.
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("SignalFactoryTweet")
-public class TradeTweet {
+@Table
+public class CommonFxTweet {
     @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String id;
 
