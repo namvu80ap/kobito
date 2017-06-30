@@ -36,4 +36,9 @@ public class CassandraConfiguration extends AbstractReactiveCassandraConfigurati
     protected String getContactPoints() {
         return env.getProperty("spring.data.cassandra.contact-points");
     }
+
+    @Override
+    protected int getPort() {
+        return Integer.parseInt(env.getProperty("spring.data.cassandra.port"));
+    }
 }
