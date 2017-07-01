@@ -55,4 +55,14 @@ public class TwitterIntegrationController {
         return "Success";
     }
 
+    @GetMapping(value = "/")
+    public String index( ) {
+
+        //Start import thread
+        Runnable importThread = () -> { twitterStreamListener.run(); };
+        new Thread(importThread).start();
+
+        return "OK";
+    }
+
 }

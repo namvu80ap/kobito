@@ -31,4 +31,14 @@ public class CassandraConfiguration extends AbstractReactiveCassandraConfigurati
     public SchemaAction getSchemaAction() {
         return SchemaAction.CREATE_IF_NOT_EXISTS;
     }
+
+    @Override
+    protected String getContactPoints() {
+        return env.getProperty("spring.data.cassandra.contact-points");
+    }
+
+    @Override
+    protected int getPort() {
+        return Integer.parseInt(env.getProperty("spring.data.cassandra.port"));
+    }
 }
