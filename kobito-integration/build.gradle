@@ -3,7 +3,7 @@
  **/
 jar {
 	baseName = 'kobito-integration'
-	version = "$kobitoVersion"
+	version = '$kobitoVersion'
 }
 
 dependencies {
@@ -22,4 +22,16 @@ dependencies {
 //Exclude logback in all package for using log4j2
 configurations {
 	all*.exclude module : 'spring-boot-starter-logging'
+}
+apply plugin: 'docker'
+task kobitoIntegrationDocker(type: Docker, dependsOn: build) {
+	push = true
+	applicationName = 'kobito-integration'
+	dockerfile = file('src/main/docker/Dockerfile')
+	doFirst {
+		copy {
+			from jar
+			into stageDir
+		}
+	}
 }
