@@ -13,15 +13,10 @@ allprojects{
 buildscript {
   repositories {
     mavenCentral()
-    maven { url "http://repo.spring.io/plugins-release" }
-    maven { url "https://plugins.gradle.org/m2/" }
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
   }
   dependencies {
-    classpath "net.ltgt.gradle:gradle-apt-plugin:0.9"
-    classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
-    classpath "io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE"
     classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     classpath('se.transmode.gradle:gradle-docker:1.2')
   }
@@ -31,7 +26,6 @@ subprojects {
 
   apply plugin: 'java'
   apply plugin: 'eclipse'
-  apply plugin: 'maven'
   apply plugin: 'org.springframework.boot'
   apply plugin: 'io.spring.dependency-management'
   apply plugin: 'docker'
@@ -43,8 +37,6 @@ subprojects {
     mavenCentral()
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
-    maven { url 'http://repo.maven.apache.org/maven2' }
-
   }
 
 

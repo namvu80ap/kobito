@@ -7,17 +7,6 @@ spring:
 ---
 spring:
   profiles: production
-  data:
-    cassandra:
-      port: 9043
-      keyspace-name: mykeyspace
-      contact-points: localhost
-  social:
-      twitter:
-        appId: WkEM9cJR22UoTpPENqEYycUXy
-        appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
-        accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
-        accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: localhost
   port: 8083
@@ -32,11 +21,6 @@ kobito:
 ---
 spring:
   profiles: development
-  data:
-    cassandra:
-      port: 9042
-      keyspace-name: mykeyspace
-      contact-points: localhost
 server:
   address: localhost
   port: 9093

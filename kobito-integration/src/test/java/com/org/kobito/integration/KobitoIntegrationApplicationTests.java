@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=35.187.212.33",
-		"spring.data.cassandra.keyspace-name=testkeyspace"})
+		"spring.data.cassandra.keyspace-name=kobito_dev"})
 public class KobitoIntegrationApplicationTests {
 
 	@Autowired
