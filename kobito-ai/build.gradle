@@ -22,17 +22,17 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-log4j2"
 	compile "org.apache.commons:commons-lang3:3.5"
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+	testCompile "io.projectreactor:reactor-test"
 }
 
 //Exclude logback in all package for using log4j2
 configurations {
 	all*.exclude module : 'spring-boot-starter-logging'
-	all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
 }
 
 apply plugin: 'docker'
 task kobitoAiDocker(type: Docker, dependsOn: build) {
-	push = true
+	push = false
 	applicationName = jar.baseName
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {

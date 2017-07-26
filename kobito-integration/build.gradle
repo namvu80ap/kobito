@@ -26,12 +26,12 @@ dependencies {
 //Exclude logback in all package for using log4j2
 configurations {
 	all*.exclude module : 'spring-boot-starter-logging'
-//	all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
+	all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
 }
 
 apply plugin: 'docker'
 task kobitoIntegrationDocker(type: Docker, dependsOn: build) {
-	push = true
+	push = false
 	applicationName = jar.baseName
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
