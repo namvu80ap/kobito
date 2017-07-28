@@ -3,17 +3,21 @@
  **/
 jar {
 	baseName = 'kobito-integration'
-	version = '$kobitoVersion'
+	version = "$kobitoVersion"
 }
 
 dependencies {
-	compile "org.springframework.boot:spring-boot-starter-data-cassandra"
 	compile "org.projectlombok:lombok:1.16.12"
-
 	compile "org.springframework.boot:spring-boot-starter-webflux"
+
+	compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+
 	compile "org.springframework.social:spring-social-twitter"
+
 	compile "com.fasterxml.jackson.core:jackson-databind"
 	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+	compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.9.0.pr3"
+
 	compile "org.springframework.boot:spring-boot-starter-log4j2"
 	compile "org.apache.commons:commons-lang3:3.5"
 	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
@@ -22,11 +26,13 @@ dependencies {
 //Exclude logback in all package for using log4j2
 configurations {
 	all*.exclude module : 'spring-boot-starter-logging'
+	all*.exclude group: 'io.netty', module: 'netty-transport-native-epoll'
 }
+
 apply plugin: 'docker'
 task kobitoIntegrationDocker(type: Docker, dependsOn: build) {
-	push = true
-	applicationName = 'kobito-integration'
+	push = false
+	applicationName = jar.baseName
 	dockerfile = file('src/main/docker/Dockerfile')
 	doFirst {
 		copy {
