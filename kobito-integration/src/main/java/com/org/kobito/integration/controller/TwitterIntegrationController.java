@@ -41,6 +41,16 @@ public class TwitterIntegrationController {
         return "Success";
     }
 
+    @GetMapping(value = "/importTweetHistoryAll")
+    public String importTweetHistoryAll() {
+
+        //Start import thread
+        Runnable importThread = () -> { importTweetHistory.getTraderTweetProfile(); };
+        new Thread(importThread).start();
+
+        return "importTweetHistoryAll";
+    }
+
     @GetMapping(value = "/startTweetListener")
     public String startTweetListener( ) {
 
@@ -58,7 +68,7 @@ public class TwitterIntegrationController {
 //        Runnable importThread = () -> { twitterStreamListener.run(); };
 //        new Thread(importThread).start();
 
-        return "OK";
+        return "OK version up";
     }
 
 }

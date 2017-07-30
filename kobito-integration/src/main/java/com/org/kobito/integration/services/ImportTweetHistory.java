@@ -65,6 +65,13 @@ public class ImportTweetHistory {
         }
     }
 
+    public void getTraderTweetProfile(){
+        for ( TweetTraderProfile profile : tweetTraderProfileRepository.findAll()) {
+            logger.info( "Import Tweet of : {} ", profile.getScreenName() );
+            this.importTweet( profile.getScreenName() );
+        }
+    }
+
     public void saveTweet( List<Tweet> items ){
         items.parallelStream().forEach(
             item -> {

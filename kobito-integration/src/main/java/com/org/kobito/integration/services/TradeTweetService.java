@@ -41,6 +41,7 @@ public class TradeTweetService {
      */
     public void saveTweet( Tweet tweet ){
         if(tradingWords != null){
+            logger.info( "fx and forex tweet: {} , screenname : {} " , tweet.getId() , tweet.getUser().getScreenName());
             if( Arrays.stream(tradingWords).parallel().anyMatch(tweet.getText()::contains ) ){
                 logger.debug("Save tradeTweet: {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
                 this.saveTradeTweet(tweet);
