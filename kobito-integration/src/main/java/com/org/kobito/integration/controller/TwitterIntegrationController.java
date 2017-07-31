@@ -31,6 +31,9 @@ public class TwitterIntegrationController {
     }
 
 
+    /*
+     * Import all trading tweet of a trader
+     */
     @GetMapping(value = "/importTweetHistory/{tweeterAccount}")
     public String importTweetHistory( @PathVariable String tweeterAccount ) {
 
@@ -41,15 +44,15 @@ public class TwitterIntegrationController {
         return "Success";
     }
 
-    @GetMapping(value = "/importTweetHistoryAll")
-    public String importTweetHistoryAll() {
-
-        //Start import thread
-        Runnable importThread = () -> { importTweetHistory.getTraderTweetProfile(); };
-        new Thread(importThread).start();
-
-        return "importTweetHistoryAll";
-    }
+//    @GetMapping(value = "/importTweetHistoryAll")
+//    public String importTweetHistoryAll() {
+//
+//        //Start import thread
+//        Runnable importThread = () -> { importTweetHistory.getTraderTweetProfile(); };
+//        new Thread(importThread).start();
+//
+//        return "importTweetHistoryAll";
+//    }
 
     @GetMapping(value = "/startTweetListener")
     public String startTweetListener( ) {
@@ -63,12 +66,7 @@ public class TwitterIntegrationController {
 
     @GetMapping(value = "/")
     public String index( ) {
-
-        //Start import thread
-//        Runnable importThread = () -> { twitterStreamListener.run(); };
-//        new Thread(importThread).start();
-
-        return "OK version up";
+        return "OK";
     }
 
 }

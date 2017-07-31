@@ -18,13 +18,14 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("SignalFactoryTweet")
+@Table
 public class TradeTweet {
     @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String id;
 
     private String tweetSource;
     private String text;
+    private Float realTradingEval;
 
     @PrimaryKeyColumn(name = "createdat", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private Date createdAt;

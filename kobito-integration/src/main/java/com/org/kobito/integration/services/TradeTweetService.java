@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.social.twitter.api.Tweet;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
 
@@ -39,43 +40,45 @@ public class TradeTweetService {
      * Save and divide into TradeTweet or CommonFxTweet
      * @param tweet
      */
-    public void saveTweet( Tweet tweet ){
-        if(tradingWords != null){
+    public void saveTweet( Tweet tweet ) {
+        if(tradingWords != null) {
             logger.info( "fx and forex tweet: {} , screenname : {} " , tweet.getId() , tweet.getUser().getScreenName());
-            if( Arrays.stream(tradingWords).parallel().anyMatch(tweet.getText()::contains ) ){
-                logger.debug("Save tradeTweet: {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
-                this.saveTradeTweet(tweet);
-            } else {
-                logger.debug("Save commonTweet: {} , USER : {}" , tweet.getText() , tweet.getUser().getId() );
-                this.saveCommonTweet(tweet);
-            }
+            this.saveCommonTweet(tweet);
         }
-
     }
 
-    private void saveTradeTweet( Tweet item ){
+    /**
+     * Save the tweet we sure that is tradetweet
+     * @param item
+     * @param realTradingEval
+     */
+    public void saveTradeTweet( Tweet item, Float realTradingEval ) {
         logger.debug("SAVE TWEET : {} ", item.toString());
-        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
-        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
-        tweetTraderProfileRepository.save(tweetTraderProfile);
-
+        this.saveTradeProfile(item);
         TradeTweet tradeTweet = new TradeTweet();
         tradeTweet.setProfileId( item.getUser().getId());
         BeanUtils.copyProperties( item, tradeTweet );
+        tradeTweet.setRealTradingEval(realTradingEval);
         tradeTweetRepository.save(tradeTweet).subscribe();
-
     }
 
-    private void saveCommonTweet( Tweet item ){
+    private void saveCommonTweet( Tweet item ) {
         logger.debug("SAVE TWEET : {} ", item.toString());
-        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
-        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
-        tweetTraderProfileRepository.save(tweetTraderProfile);
-
+        this.saveTradeProfile(item);
         CommonFxTweet commonTweet = new CommonFxTweet();
         commonTweet.setProfileId( item.getUser().getId());
         BeanUtils.copyProperties( item, commonTweet );
         commonTweetRepository.save(commonTweet).subscribe();
+    }
 
+    public void saveTradeProfile( Tweet item  ){
+        TweetTraderProfile tweetTraderProfile = new TweetTraderProfile();
+        BeanUtils.copyProperties( item.getUser(), tweetTraderProfile );
+        tweetTraderProfileRepository.save(tweetTraderProfile);
+    }
+
+    public boolean isSimiliarTradeTweet( String tweet ){
+
+       return true;
     }
 }

@@ -49,14 +49,14 @@ public class ImportTweetHistory {
         logger.debug("TwitterTrader : {} ", tweetAccount);
         List<Tweet> list = twitter.timelineOperations().getUserTimeline(tweetAccount,importTweetPageSize);
         if(list != null)
-            saveTweet(list);
+            this.saveTweet(list);
         if(list != null && list.size() == importTweetPageSize){
             Tweet lastItem = list.get(importTweetPageSize-1);
             while(lastItem!=null){
                 List<Tweet> nextList = twitter.timelineOperations()
                                               .getUserTimeline(tweetAccount, importTweetPageSize,
                                                                 1, new Long(lastItem.getId()));
-                saveTweet(nextList);
+                this.saveTweet(nextList);
                 if(nextList == null || nextList.size() < importTweetPageSize){
                     break;
                 }
@@ -65,24 +65,17 @@ public class ImportTweetHistory {
         }
     }
 
-    public void getTraderTweetProfile(){
-        for ( TweetTraderProfile profile : tweetTraderProfileRepository.findAll()) {
-            logger.info( "Import Tweet of : {} ", profile.getScreenName() );
-            this.importTweet( profile.getScreenName() );
-        }
-    }
+//    public void getTraderTweetProfile(){
+//        for ( TweetTraderProfile profile : tweetTraderProfileRepository.findAll()) {
+//            logger.info( "Import Tweet of : {} ", profile.getScreenName() );
+//            this.importTweet( profile.getScreenName() );
+//        }
+//    }
 
-    public void saveTweet( List<Tweet> items ){
+    private void saveTweet( List<Tweet> items ){
         items.parallelStream().forEach(
-            item -> {
-                        logger.info("Save tweet: Id {} , Text {}, Name {} " , item.getId(),
-                                    item.getText(), item.getUser().getName() );
-                        tradeTweetService.saveTweet(item);
-                    }
+            item -> { tradeTweetService.saveTradeTweet(item, 99.9f); }
         );
     }
-
-
-
 
 }
