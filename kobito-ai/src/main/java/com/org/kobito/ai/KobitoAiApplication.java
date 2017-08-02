@@ -18,4 +18,5 @@ public class KobitoAiApplication {
 	public String index( ) {
 		return "OK";
 	}
+
 }

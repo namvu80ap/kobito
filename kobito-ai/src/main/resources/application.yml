@@ -7,6 +7,11 @@ spring:
 ---
 spring:
   profiles: production
+  data:
+      cassandra:
+        port: 9042
+        keyspace-name: kobito_dev
+        contact-points: 35.190.226.237
 server:
   address: 0.0.0.0
   port: 8083
@@ -21,6 +26,11 @@ kobito:
 ---
 spring:
   profiles: development
+  data:
+      cassandra:
+        port: 9042
+        keyspace-name: kobito_dev
+        contact-points: 35.190.226.237
 server:
   address: 0.0.0.0
   port: 9093
