@@ -32,7 +32,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=35.190.226.237",
+@SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=35.194.118.36",
 		"spring.data.cassandra.keyspace-name=kobito_dev"})
 public class KobitoAiApplicationTests {
 
@@ -47,7 +47,7 @@ public class KobitoAiApplicationTests {
 
 		List<TradeTweet> listTradeTweet = tweetAnalystService.analystIncomeTweet("Sell USDJPY lost 10 pids");
 
-		JavaRDD<TradeTweet> tradeTweetRDD = sc.parallelize(listTradeTweet).;
+		JavaRDD<TradeTweet> tradeTweetRDD = sc.parallelize(listTradeTweet);
 
 
 		LinearRegression lr = new LinearRegression()
@@ -55,37 +55,22 @@ public class KobitoAiApplicationTests {
 				.setRegParam(0.3)
 				.setElasticNetParam(0.8);
 
-		spark.readStream().
-//		VectorIndexerModel featureIndexer = new VectorIndexer;
-
-		// Generate the schema based on the string of schema
-		List<StructField> fields = new ArrayList();
-		StructField realTradingEval = DataTypes.createStructField("label", DataTypes.StringType, true);
-		fields.add(realTradingEval);
-
-		StructField tweetText = DataTypes.createStructField("features", DataTypes.StringType, true);
-		fields.add(tweetText);
-
-		StructType schema = DataTypes.createStructType(fields);
-
-		JavaRDD<Row> rowRDD = tradeTweetRDD.map((Function<TradeTweet, Row>) record -> {
-			return RowFactory.create(String.valueOf(record.getRealTradingEval()), record.getText());
-		});
-
-		Dataset<Row>  dataFrame = spark.createDataFrame(rowRDD, schema);
-
-//		dataFrame.show();
-
-		LinearRegression lr = new LinearRegression();
-		LinearRegressionModel model = lr.train(dataFrame);
 
 
-		List<String> jsonData = Arrays.asList(
-				"{\"label\":\"90.0\",\"features\": \"close USDJPY -1 pids\"}");
-		Dataset<String> testData = spark.createDataset(jsonData, Encoders.STRING());
-		Dataset<Row> anotherTweet = spark.read().json(testData);
+		Dataset<Row>  dataFrame = spark.createDataFrame(tradeTweetRDD, TradeTweet.class);
 
-		Dataset<Row> anotherTransform = model.transform(anotherTweet);
+		dataFrame.show();
+
+//		LinearRegression lr = new LinearRegression();
+//		LinearRegressionModel model = lr.train(dataFrame);
+//
+//
+//		List<String> jsonData = Arrays.asList(
+//				"{\"label\":\"90.0\",\"features\": \"close USDJPY -1 pids\"}");
+//		Dataset<String> testData = spark.createDataset(jsonData, Encoders.STRING());
+//		Dataset<Row> anotherTweet = spark.read().json(testData);
+//
+//		Dataset<Row> anotherTransform = model.transform(anotherTweet);
 
 		//Dataset<Row> predict  = anotherTransform.select("realTradingEval","tweetText","prediction");
 		//predict.show();
