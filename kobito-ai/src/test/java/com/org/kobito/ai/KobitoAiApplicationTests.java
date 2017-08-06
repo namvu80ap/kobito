@@ -76,15 +76,25 @@ public class KobitoAiApplicationTests {
 		Word2VecModel model = word2Vec.fit(documentDF);
 		Dataset<Row> result = model.transform(documentDF);
 
+		StructType schema2 = new StructType(new StructField[]{
+				new StructField("label", DataTypes.DoubleType, false, Metadata.empty()),
+				new StructField("features", new VectorUDT(), false, Metadata.empty())
+		});
+
+
+		JavaRDD<Row> rowRDD = result.javaRDD().map((Function<Row, Row>) record -> {
+			return RowFactory.create(1.0,record.get(1));
+		});
+
+		Dataset<Row> next = spark.createDataFrame(rowRDD,schema2);
+
 		LogisticRegression lr = new LogisticRegression()
 				.setMaxIter(10)
 				.setRegParam(0.001);
 
-		lr.fit(result);
-
-		StructType schema2 = new StructType(new StructField[]{
-				new StructField("label", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
-		});
+		LogisticRegressionModel model2 = lr.fit(next);
+		Dataset<Row> restul2 = model2.transform(next);
+		restul2.show();
 
 
 //		for (Row row : result.collectAsList()) {
