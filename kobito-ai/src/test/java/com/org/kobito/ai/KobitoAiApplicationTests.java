@@ -54,7 +54,24 @@ public class KobitoAiApplicationTests {
 
 
 		List<Row> data = listTradeTweet.stream().map(
-				item -> RowFactory.create(Arrays.asList(item.getText().split(" ")))).collect(Collectors.toList());
+				item -> {
+					String text = item.getText();
+					if( text.contains("Sell") || text.contains("pips") )
+						return RowFactory.create(1.0, Arrays.asList(text.split(" ")));
+					else
+						return RowFactory.create(0.0, Arrays.asList(text.split(" ")));
+				}
+		).collect(Collectors.toList());
+
+		// Prepare test documents, which are unlabeled.
+		List<Row> testList = Arrays.asList(
+				RowFactory.create( 0.0, Arrays.asList("Forex Sell loss 10 pips".split(" ")) ),
+				RowFactory.create( 0.0, Arrays.asList("Tam bay".split( " "))),
+				RowFactory.create( 0.0, Arrays.asList("Bought USDJPY 1.22".split(" ")) ),
+				RowFactory.create( 0.0, Arrays.asList("Anh yeu em".split(" "))),
+				RowFactory.create( 0.0, Arrays.asList("MAPS Closed #FX #Forex #USDCADgcm Sell 1.2932 from 1.1232 for 12.0 pips".split(" "))),
+				RowFactory.create( 0.0, Arrays.asList("Deposit Bonus Award From Eqtrades https://t.co/rQMhwr0mgK #FOREX #BONUS #PROMOTION".split(" ")))
+		);
 
 //						new JavaLabeledDocument( new Long(item.getId()), item.getText(), 1.0 )).collect(Collectors.toList());
 
@@ -62,39 +79,83 @@ public class KobitoAiApplicationTests {
 //				item -> new JavaLabeledDocument( new Long(item.getId()), item.getText(), 1.0 )).collect(Collectors.toList());
 
 		StructType schema = new StructType(new StructField[]{
+				new StructField("label", DataTypes.DoubleType, false, Metadata.empty()),
 				new StructField("text", new ArrayType(DataTypes.StringType, true), false, Metadata.empty())
 		});
+
 		Dataset<Row> documentDF = spark.createDataFrame(data, schema);
+
+		Dataset<Row> testDF = spark.createDataFrame(testList, schema);
 
 		// Learn a mapping from words to Vectors.
 		Word2Vec word2Vec = new Word2Vec()
 				.setInputCol("text")
-				.setOutputCol("result")
+				.setOutputCol("features")
 				.setVectorSize(10)
 				.setMinCount(0);
 
 		Word2VecModel model = word2Vec.fit(documentDF);
+
+//		model.findSynonymsArray();
 		Dataset<Row> result = model.transform(documentDF);
 
-		StructType schema2 = new StructType(new StructField[]{
-				new StructField("label", DataTypes.DoubleType, false, Metadata.empty()),
-				new StructField("features", new VectorUDT(), false, Metadata.empty())
-		});
+		Word2VecModel model2 = word2Vec.fit(testDF);
+		Dataset<Row> r2 = model2.transform(testDF);
+		LinearRegression lg = new LinearRegression();
+		LinearRegressionModel lgModle = lg.fit(result);
+		lgModle.transform(r2).show(100);
 
+//		LogisticRegression lr = new LogisticRegression()
+//				.setMaxIter(10)
+//				.setRegParam(0.01);
+////
+//		LogisticRegressionModel lrModel = lr.fit(result);
+////
+//		Dataset<Row> restul2 = lrModel.transform(r2);
+//		restul2.show(100);
 
-		JavaRDD<Row> rowRDD = result.javaRDD().map((Function<Row, Row>) record -> {
-			return RowFactory.create(1.0,record.get(1));
-		});
-
-		Dataset<Row> next = spark.createDataFrame(rowRDD,schema2);
-
-		LogisticRegression lr = new LogisticRegression()
-				.setMaxIter(10)
-				.setRegParam(0.001);
-
-		LogisticRegressionModel model2 = lr.fit(next);
-		Dataset<Row> restul2 = model2.transform(next);
-		restul2.show();
+//		result.show();
+//
+//		List<Row> newText = Arrays.asList(
+////				RowFactory.create( 0.0, Arrays.asList("I love you more than i can say".split(" ")) ),
+//				RowFactory.create( 0.0, Arrays.asList("Sing a song".split(" ")) ),
+//				RowFactory.create( 0.0, Arrays.asList("a m j dh".split(" ")) ),
+////				RowFactory.create( 0.0, Arrays.asList("okane ga agaru".split(" ")) ),
+////				RowFactory.create( 0.0, Arrays.asList("I go to buy a bag, then I will sell my car".split(" ")) ),
+////				RowFactory.create( 0.0, Arrays.asList("Money will trade tonight".split(" ")) ),
+//				RowFactory.create( 0.0, Arrays.asList("Forex want to buy but we have to".split( " ")))
+//		);
+//
+//		Dataset<Row> newDF = spark.createDataFrame(newText, schema);
+//		Dataset<Row> newResult = model.transform(newDF);
+//
+//		StructType schema2 = new StructType(new StructField[]{
+//				new StructField("label", DataTypes.DoubleType, false, Metadata.empty()),
+//				new StructField("features", new VectorUDT(), false, Metadata.empty())
+//		});
+//
+//		JavaRDD<Row> rowRDD = result.javaRDD().map((Function<Row, Row>) record -> {
+//			return RowFactory.create(record.get(0),record.get(2));
+//		});
+//
+//
+//		JavaRDD<Row> newTest = newResult.javaRDD().map((Function<Row, Row>) record -> {
+//			return RowFactory.create(record.get(0),record.get(2));
+//		});
+//
+//		Dataset<Row> logicDF = spark.createDataFrame(rowRDD,schema2);
+//
+//		Dataset<Row> testDF  = spark.createDataFrame(newTest,schema2);
+//
+//		LogisticRegression lr = new LogisticRegression()
+//				.setMaxIter(10)
+//				.setRegParam(0.01);
+////
+//		LogisticRegressionModel model2 = lr.fit(result);
+////
+//		Dataset<Row> restul2 = model2.transform(result);
+//		restul2.show(100);
+//
 
 
 //		for (Row row : result.collectAsList()) {
