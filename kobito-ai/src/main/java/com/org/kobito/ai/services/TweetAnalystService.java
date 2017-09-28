@@ -27,7 +27,7 @@ public class TweetAnalystService {
      */
     public List<TradeTweet> analystIncomeTweet(String tweetStr ){
         Flux<TradeTweet> tweetFlux = tradeTweetRepository.findAll();
-        Stream< List<TradeTweet> > stream = tweetFlux.buffer(200, 200).toStream();
+        Stream< List<TradeTweet> > stream = tweetFlux.buffer(500, 500).toStream();
 //        stream.forEach( list -> {
 //            for ( TradeTweet item : list ) {
 //                System.out.println( item.getText() );

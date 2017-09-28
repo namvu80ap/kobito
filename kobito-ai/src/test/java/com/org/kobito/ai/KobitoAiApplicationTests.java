@@ -19,7 +19,7 @@ import org.apache.spark.ml.linalg.DenseVector;
 import org.apache.spark.ml.linalg.VectorUDT;
 import org.apache.spark.ml.regression.LinearRegression;
 import org.apache.spark.ml.regression.LinearRegressionModel;
-import org.apache.spark.mllib.linalg.Vectors;
+import org.apache.spark.ml.linalg.Vectors;
 import org.apache.spark.sql.*;
 import org.apache.spark.sql.types.*;
 import org.junit.Test;
@@ -35,14 +35,78 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.apache.spark.sql.functions.col;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=35.194.98.121",
+@SpringBootTest({"spring.data.cassandra.port=9042","spring.data.cassandra.contact-points=104.198.95.15",
 		"spring.data.cassandra.keyspace-name=kobito_dev"})
 public class KobitoAiApplicationTests {
 
 	@Autowired
 	TweetAnalystService tweetAnalystService;
+
+//	@Test
+	public void LSHSimiliar() {
+		SparkConf conf = new SparkConf().setAppName("App Local").setMaster("local");
+		JavaSparkContext sc = new JavaSparkContext(conf);
+		SparkSession spark = SparkSession.builder().config(conf).getOrCreate();
+
+		// $example on$
+		List<Row> dataA = Arrays.asList(
+				RowFactory.create(0, Vectors.dense(1.0, 1.0)),
+				RowFactory.create(1, Vectors.dense(1.0, -1.0)),
+				RowFactory.create(2, Vectors.dense(-1.0, -1.0)),
+				RowFactory.create(3, Vectors.dense(-1.0, 1.0))
+		);
+
+		List<Row> dataB = Arrays.asList(
+				RowFactory.create(4, Vectors.dense(1.0, 0.0)),
+				RowFactory.create(5, Vectors.dense(-1.0, 0.0)),
+				RowFactory.create(6, Vectors.dense(0.0, 1.0)),
+				RowFactory.create(7, Vectors.dense(0.0, -1.0))
+		);
+
+		StructType schema = new StructType(new StructField[]{
+				new StructField("id", DataTypes.IntegerType, false, Metadata.empty()),
+				new StructField("features", new VectorUDT(), false, Metadata.empty())
+		});
+		Dataset<Row> dfA = spark.createDataFrame(dataA, schema);
+		Dataset<Row> dfB = spark.createDataFrame(dataB, schema);
+
+		org.apache.spark.ml.linalg.Vector key = Vectors.dense(0.0, 0.0);
+
+		BucketedRandomProjectionLSH mh = new BucketedRandomProjectionLSH()
+				.setBucketLength(2.0)
+				.setNumHashTables(3)
+				.setInputCol("features")
+				.setOutputCol("hashes");
+
+		BucketedRandomProjectionLSHModel model = mh.fit(dfA);
+
+		// Feature Transformation
+		System.out.println("The hashed dataset where hashed values are stored in the column 'hashes':");
+		model.transform(dfA).show();
+
+		// Compute the locality sensitive hashes for the input rows, then perform approximate
+		// similarity join.
+		// We could avoid computing hashes by passing in the already-transformed dataset, e.g.
+		// `model.approxSimilarityJoin(transformedA, transformedB, 1.5)`
+		System.out.println("Approximately joining dfA and dfB on distance smaller than 1.5:");
+		model.approxSimilarityJoin(dfA, dfB, 1.5, "EuclideanDistance")
+				.select(col("datasetA.id").alias("idA"),
+						col("datasetB.id").alias("idB"),
+						col("EuclideanDistance")).show();
+
+		// Compute the locality sensitive hashes for the input rows, then perform approximate nearest
+		// neighbor search.
+		// We could avoid computing hashes by passing in the already-transformed dataset, e.g.
+		// `model.approxNearestNeighbors(transformedA, key, 2)`
+		System.out.println("Approximately searching dfA for 2 nearest neighbors of the key:");
+		model.approxNearestNeighbors(dfA, key, 10).show();
+		// $example off$
+
+		spark.stop();
+	}
 
 	@Test
 	public void testEstimator() throws Exception {
@@ -50,8 +114,7 @@ public class KobitoAiApplicationTests {
 		JavaSparkContext sc = new JavaSparkContext(conf);
 		SparkSession spark = SparkSession.builder().config(conf).getOrCreate();
 
-		List<TradeTweet> listTradeTweet = tweetAnalystService.analystIncomeTweet("Sell USDJPY lost 10 pids");
-
+		List<TradeTweet> listTradeTweet = tweetAnalystService.analystIncomeTweet("Sell USDJPY lost 10 pips");
 
 		List<Row> data = listTradeTweet.stream().map(
 				item -> {
@@ -103,7 +166,7 @@ public class KobitoAiApplicationTests {
 		Dataset<Row> r2 = model2.transform(testDF);
 		LinearRegression lg = new LinearRegression();
 		LinearRegressionModel lgModle = lg.fit(result);
-		lgModle.transform(r2).show(100);
+		lgModle.transform(r2).show(10);
 
 //		LogisticRegression lr = new LogisticRegression()
 //				.setMaxIter(10)
@@ -212,5 +275,6 @@ public class KobitoAiApplicationTests {
 
 
 	}
+
 
 }
