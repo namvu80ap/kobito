@@ -53,15 +53,15 @@ public class KobitoAiApplicationTests {
 		List<TradeTweet> listTradeTweet = tweetAnalystService.analystIncomeTweet("Sell USDJPY lost 10 pids");
 
 
-		List<Row> data = listTradeTweet.stream().map(
-				item -> {
-					String text = item.getText();
-					if( text.contains("Sell") || text.contains("pips") )
-						return RowFactory.create(1.0, Arrays.asList(text.split(" ")));
-					else
-						return RowFactory.create(0.0, Arrays.asList(text.split(" ")));
-				}
-		).collect(Collectors.toList());
+//		List<Row> data = listTradeTweet.stream().map(
+//				item -> {
+//					String text = item.getText();
+//					if( text.contains("Sell") || text.contains("pips") )
+//						return RowFactory.create(1.0, Arrays.asList(text.split(" ")));
+//					else
+//						return RowFactory.create(0.0, Arrays.asList(text.split(" ")));
+//				}
+//		).collect(Collectors.toList());
 
 		// Prepare test documents, which are unlabeled.
 		List<Row> testList = Arrays.asList(

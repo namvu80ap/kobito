@@ -11,7 +11,7 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-webflux"
 
 	compile "org.springframework.boot:spring-boot-starter-data-cassandra"
-	compile "org.springframework.social:spring-social-twitter"
+	compile "org.springframework.social:spring-social-twitter:2.0.0.M4"
 
 	compile "com.fasterxml.jackson.core:jackson-databind"
 	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
