@@ -3,12 +3,13 @@ package com.org.kobito.integration.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cassandra.core.Ordering;
-import org.springframework.cassandra.core.PrimaryKeyType;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.mapping.Table;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.cql.Ordering;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 
+
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -19,15 +20,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-public class TradeTweet {
+public class TradeTweet implements Serializable {
     @PrimaryKeyColumn(name = "id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String id;
 
     private String tweetSource;
     private String text;
+    private Float realTradingEval;
 
-    @PrimaryKeyColumn(name = "createdat", ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "createdat", ordinal = 2, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private Date createdAt;
+
     private String fromUser;
     private String profileImageUrl;
     private Long toUserId;
@@ -42,6 +45,7 @@ public class TradeTweet {
     private boolean favorited;
     private Integer favoriteCount;
 
+    @PrimaryKeyColumn(name = "profileid", ordinal = 1, type = PrimaryKeyType.PARTITIONED )
     private long profileId;
 
 }

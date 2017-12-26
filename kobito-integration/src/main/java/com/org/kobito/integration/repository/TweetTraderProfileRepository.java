@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Created by v_nam on 2017/04/26.
  */
 @Repository
-public interface TweetTraderProfileRepository extends CassandraRepository<TweetTraderProfile> {
+public interface TweetTraderProfileRepository extends CassandraRepository<TweetTraderProfile, Long> {
 }

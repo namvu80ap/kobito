@@ -3,9 +3,10 @@ package com.org.kobito.integration.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table
-public class TweetTraderProfile {
+public class TweetTraderProfile implements Serializable {
 
     @PrimaryKey
     private long id;
