@@ -1,0 +1,67 @@
+#In production server, for overriding this profiles config, gragle should run with : bootRun -Dspring.profiles.active=production
+spring:
+  profiles:
+    active: development
+
+#Production env default config
+---
+spring:
+  profiles: production
+  data:
+    cassandra:
+      port: 9042
+      keyspace-name: kobito_dev
+      contact-points: 35.201.24.119
+      schema-action: CREATE_IF_NOT_EXISTS
+      username: cassandra
+      password: RLpPLb23xjMx
+      load-balancing-policy: com.datastax.driver.core.policies.RoundRobinPolicy
+  social:
+      twitter:
+        appId: WkEM9cJR22UoTpPENqEYycUXy
+        appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
+        accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
+        accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
+server:
+  address: 0.0.0.0
+  port: 8081
+#Logging configure
+logging:
+  config: 'classpath:log4j2.yml'
+kobito:
+  config:
+    twitter:
+      importTweetPageSize: 50
+      twitterTradingHashtag: "#FX,#Forex"
+      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
+#Development env default config
+---
+spring:
+  profiles: development
+  data:
+    cassandra:
+      port: 9042
+      keyspace-name: kobito_dev
+      contact-points: 35.201.24.119
+      username: cassandra
+      password: RLpPLb23xjMx
+      schema-action: CREATE_IF_NOT_EXISTS
+      load-balancing-policy: com.datastax.driver.core.policies.RoundRobinPolicy
+  social:
+    twitter:
+      appId: WkEM9cJR22UoTpPENqEYycUXy
+      appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
+      accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
+      accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
+server:
+  address: 0.0.0.0
+  port: 9091
+#Logging configure
+logging:
+  config: 'classpath:log4j2_dev.yml'
+kobito:
+  config:
+    twitter:
+      importTweetPageSize: 50
+      twitterTradingHashtag: "#FX,#Forex"
+      tradingWords: buy,Buy,BUY,sell,Sell,SELL,Loss,loss,LOSS,Profit,profit,PROFIT,Close,close,CLOSE,Open,pips
