@@ -3,6 +3,8 @@
  */
 package com.org.kobito.kobitosimilarity.services;
 
+import org.springframework.stereotype.Service;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
  * @author Vu Hoai Nam
  * This class translate from PHP TypoGenerator to Java
  */
+@Service
 public class TypoGenerator {
 
 	/**
@@ -263,9 +266,10 @@ public class TypoGenerator {
 		return false ;
 	}
 	
-	public static void main( String[] args ){
-		TypoGenerator typeos = new TypoGenerator();
-		boolean check = typeos.isTypos("namvu", "namvu");
-		System.out.print( check );
-	}
+//	public static void main( String[] args ){
+//		TypoGenerator typeos = new TypoGenerator();
+//		boolean check = typeos.isTypos("namvu", "namvu");
+//		System.out.print( check );
+//	}
+
 }

@@ -1,5 +1,6 @@
 package com.org.kobito.kobitosimilarity;
 
+import com.datastax.driver.core.utils.UUIDs;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +22,7 @@ public class KobitoSimilarityApplicationTests {
 
 	@Test
 	public void insertSimilarWord(){
-		service.saveSimilarWord("TEST","TESTY",100);
+		service.saveSimilarWord(UUIDs.timeBased(), "TESTE","TESTY",100);
 		System.out.println("----------------------------------------------------------------------------------------");
 		System.out.println("----------------------------------------------------------------------------------------");
 		System.out.println("----------------------------------------------------------------------------------------");

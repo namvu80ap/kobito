@@ -16,15 +16,9 @@ spring:
       username: cassandra
       password: RLpPLb23xjMx
       load-balancing-policy: com.datastax.driver.core.policies.RoundRobinPolicy
-  social:
-      twitter:
-        appId: WkEM9cJR22UoTpPENqEYycUXy
-        appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
-        accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
-        accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: 0.0.0.0
-  port: 8081
+  port: 8088
 #Logging configure
 logging:
   config: 'classpath:log4j2.yml'
@@ -42,17 +36,11 @@ spring:
     cassandra:
       port: 9042
       keyspace-name: kobito_dev
-      contact-points: 35.201.24.119
-      username: cassandra
-      password: RLpPLb23xjMx
+      contact-points: 35.184.113.201
+      username: kobito-cassandra
+      password: kobito-cassandra
       schema-action: CREATE_IF_NOT_EXISTS
       load-balancing-policy: com.datastax.driver.core.policies.RoundRobinPolicy
-  social:
-    twitter:
-      appId: WkEM9cJR22UoTpPENqEYycUXy
-      appSecret: awJz9ZSGACLahOlXE1Q6hLSrmeNYGCrCCRNPCjFOA91lmtIcqa
-      accessToken: 14710799-Ew6GMveAcrkX9akyS0QPpIvWo5JCDxXC1AE42KcaQ
-      accessTokenSecret: wsSvW0AA6oNWEE7PkLtpmVV9hS1V0L823Cx8H3TP6zyMX
 server:
   address: 0.0.0.0
   port: 9091

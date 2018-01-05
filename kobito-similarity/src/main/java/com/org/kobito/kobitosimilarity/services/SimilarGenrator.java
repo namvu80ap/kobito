@@ -3,6 +3,8 @@
  */
 package com.org.kobito.kobitosimilarity.services;
 
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 
@@ -10,8 +12,9 @@ import java.util.*;
  * @author Vu Hoai Nam 
  * <p>This class generate the words not base on similar mapping character
  */
+@Service
 public class SimilarGenrator {
-	
+
 	/**
 	 * The domain name format just include a-z , A-Z , 0-9 , "-" , "_" ( but the "-" and "_" not at the begin or the end )
 	 */
