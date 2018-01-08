@@ -3,6 +3,10 @@
  */
 package com.org.kobito.kobitosimilarity.services;
 
+import com.datastax.driver.core.utils.UUIDs;
+import com.org.kobito.kobitosimilarity.model.SimilarWord;
+import com.org.kobito.kobitosimilarity.repository.SimilarWordRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -14,6 +18,9 @@ import java.util.*;
  */
 @Service
 public class SimilarGenrator {
+
+	@Autowired
+	private SimilarWordRepository repository;
 
 	/**
 	 * The domain name format just include a-z , A-Z , 0-9 , "-" , "_" ( but the "-" and "_" not at the begin or the end )

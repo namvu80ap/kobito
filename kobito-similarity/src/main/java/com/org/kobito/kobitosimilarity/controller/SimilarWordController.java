@@ -16,7 +16,7 @@ public class SimilarWordController {
 
     @GetMapping(value = "/")
     public String index( ) {
-        services.saveSimilarWord(UUIDs.timeBased(),"TEST","TESTY",100);
+        //services.saveSimilarWord(UUIDs.timeBased(),"TEST","TESTY",100);
         return "OK";
     }
 

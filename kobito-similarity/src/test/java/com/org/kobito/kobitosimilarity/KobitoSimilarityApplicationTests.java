@@ -22,7 +22,7 @@ public class KobitoSimilarityApplicationTests {
 
 	@Test
 	public void insertSimilarWord(){
-		service.saveSimilarWord(UUIDs.timeBased(), "TESTE","TESTY",100);
+		service.saveSimilarWordGenerated("namvu80ap");
 		System.out.println("----------------------------------------------------------------------------------------");
 		System.out.println("----------------------------------------------------------------------------------------");
 		System.out.println("----------------------------------------------------------------------------------------");
