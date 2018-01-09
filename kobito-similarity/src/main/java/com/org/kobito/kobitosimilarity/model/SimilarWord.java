@@ -21,4 +21,35 @@ public class SimilarWord implements Serializable {
     private String similarWord;
     private Integer howSimilar;
 
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public String getSimilarWord() {
+        return similarWord;
+    }
+
+    public void setSimilarWord(String similarWord) {
+        this.similarWord = similarWord;
+    }
+
+    public Integer getHowSimilar() {
+        return howSimilar;
+    }
+
+    public void setHowSimilar(Integer howSimilar) {
+        this.howSimilar = howSimilar;
+    }
 }

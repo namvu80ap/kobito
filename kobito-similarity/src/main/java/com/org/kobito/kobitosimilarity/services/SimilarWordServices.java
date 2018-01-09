@@ -64,16 +64,12 @@ public class SimilarWordServices {
         if( word.length() < CHANGE_ONE_ACCESSIBLE ){
             //Do nothing
         }
-
         word = word.toLowerCase();
         StringBuilder processBuilder = new StringBuilder( word );
 
         int domainCharLength = DOMAIN_NAME_CHAR.length;
 
         int wordLength = processBuilder.length();
-
-        Flux rangerLength = Flux.range(0, processBuilder.length());
-        rangerLength.subscribe( item -> { logger.debug("The item ----------------------- {} -------------",item); } );
 
         for (int i = 0; i < processBuilder.length(); i++) {
             for (int j = 0; j < domainCharLength ; j++) {
@@ -83,7 +79,6 @@ public class SimilarWordServices {
                 //Domain format do not accept - and _ at start and end of string
                 if( !tmp.matches("^-.*") && !tmp.matches("^\\_.*")
                         && tmp.indexOf("-") != (wordLength -1) && tmp.indexOf("_") != (wordLength -1) ){
-//                    logger.debug(" Work and tmp ---------------------------------- {}, {} ",word, tmp);
                     saveSimilarWord(word,tmp);
                 }
             }

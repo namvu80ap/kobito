@@ -3,6 +3,7 @@ package com.org.kobito.kobitosimilarity;
 import com.datastax.driver.core.utils.UUIDs;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -12,8 +13,8 @@ import com.org.kobito.kobitosimilarity.services.SimilarWordServices;
 @SpringBootTest
 public class KobitoSimilarityApplicationTests {
 
-	@MockBean
-	private SimilarWordServices service;
+	@Autowired
+	private SimilarWordServices services;
 
 	@Test
 	public void contextLoads() {
@@ -22,15 +23,7 @@ public class KobitoSimilarityApplicationTests {
 
 	@Test
 	public void insertSimilarWord(){
-		service.saveSimilarWordGenerated("namvu80ap");
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println(service.count());
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println("----------------------------------------------------------------------------------------");
-		System.out.println("----------------------------------------------------------------------------------------");
+		services.saveSimilarWordGenerated("namvu80ap");
 	}
 
 }
