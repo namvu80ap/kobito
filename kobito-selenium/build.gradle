@@ -1,0 +1,47 @@
+/**
+ * Learn and analyst the trading data history, then give suggestions to trader system.
+ **/
+jar {
+	baseName = 'kobito-selenium'
+	version = "$kobitoVersion"
+}
+
+dependencies {
+	compile "org.projectlombok:lombok:1.16.12"
+	compile "org.springframework.boot:spring-boot-starter-webflux"
+
+	//compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+	compile "org.seleniumhq.selenium:selenium-server:3.8.1"
+	compile "org.seleniumhq.selenium:selenium-java:3.8.1"
+	compile "org.seleniumhq.selenium:selenium-remote-driver:3.8.1"
+
+	compile "com.github.detro:phantomjsdriver:1.2.0"
+
+	compile "com.fasterxml.jackson.core:jackson-databind"
+	compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml"
+	compile "com.fasterxml.jackson.module:jackson-module-scala_2.11:2.9.0.pr3"
+
+	compile "org.springframework.boot:spring-boot-starter-log4j2"
+	compile "org.apache.commons:commons-lang3:3.5"
+	testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+	testCompile "io.projectreactor:reactor-test"
+}
+
+//Exclude logback in all package for using log4j2
+configurations {
+	all*.exclude module : 'spring-boot-starter-logging'
+}
+
+//
+//apply plugin: 'docker'
+//task kobitoSimilarityDocker(type: Docker, dependsOn: build) {
+//	push = false
+//	applicationName = jar.baseName
+//	dockerfile = file('src/main/docker/Dockerfile')
+//	doFirst {
+//		copy {
+//			from jar
+//			into stageDir
+//		}
+//	}
+//}

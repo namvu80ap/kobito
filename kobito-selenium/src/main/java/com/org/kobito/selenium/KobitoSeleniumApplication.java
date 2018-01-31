@@ -1,12 +1,12 @@
-package com.org.kobito.stream;
+package com.org.kobito.selenium;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KobitoStreamApplication {
+public class KobitoSeleniumApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(KobitoStreamApplication.class, args);
+		SpringApplication.run(KobitoSeleniumApplication.class, args);
 	}
 }

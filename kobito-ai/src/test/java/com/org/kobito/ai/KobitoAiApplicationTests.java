@@ -116,7 +116,7 @@ public class KobitoAiApplicationTests {
 
 		List<TradeTweet> listTradeTweet = tweetAnalystService.analystIncomeTweet("Sell USDJPY lost 10 pips");
 
-//		List<Row> data = listTradeTweet.stream().map(
+//		List<Row> data = listTradeTweet.selenium().map(
 //				item -> {
 //					String text = item.getText();
 //					if( text.contains("Sell") || text.contains("pips") )
@@ -138,7 +138,7 @@ public class KobitoAiApplicationTests {
 
 //						new JavaLabeledDocument( new Long(item.getId()), item.getText(), 1.0 )).collect(Collectors.toList());
 
-//		List<JavaLabeledDocument> lset = listTradeTweet.stream().map(
+//		List<JavaLabeledDocument> lset = listTradeTweet.selenium().map(
 //				item -> new JavaLabeledDocument( new Long(item.getId()), item.getText(), 1.0 )).collect(Collectors.toList());
 
 		StructType schema = new StructType(new StructField[]{
