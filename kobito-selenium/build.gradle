@@ -10,7 +10,9 @@ dependencies {
 	compile "org.projectlombok:lombok:1.16.12"
 	compile "org.springframework.boot:spring-boot-starter-webflux"
 
-	//compile "org.springframework.boot:spring-boot-starter-data-cassandra"
+	compile "org.springframework.boot:spring-boot-starter-jdbc"
+	compile("org.springframework.boot:spring-boot-starter-batch")
+	compile("org.hsqldb:hsqldb")
 	compile "org.seleniumhq.selenium:selenium-server:3.8.1"
 	compile "org.seleniumhq.selenium:selenium-java:3.8.1"
 	compile "org.seleniumhq.selenium:selenium-remote-driver:3.8.1"
