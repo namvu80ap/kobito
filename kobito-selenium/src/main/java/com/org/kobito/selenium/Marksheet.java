@@ -1,6 +1,7 @@
 package com.org.kobito.selenium;
 public class Marksheet {
 	private String stdId;
+
 	private int totalSubMark;
 	public Marksheet(String stdId, int totalSubMark){
 		this.stdId = stdId;
