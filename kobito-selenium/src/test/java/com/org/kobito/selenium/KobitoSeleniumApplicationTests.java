@@ -1,5 +1,6 @@
 package com.org.kobito.selenium;
 
+import com.org.kobito.selenium.repositories.WishRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
@@ -13,6 +14,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,11 +24,15 @@ import java.util.List;
 @SpringBootTest
 public class KobitoSeleniumApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
+	@Autowired
+	WishRepository repository;
 
 	@Test
+	public void contextLoads() {
+		System.out.println("---------------------------------------------");
+		System.out.println(repository.count());
+	}
+
 	public void testGoogle(){
 		// Create a new instance of the Firefox driver
 		// Notice that the remainder of the code relies on the interface,
@@ -75,7 +81,6 @@ public class KobitoSeleniumApplicationTests {
 		driver.quit();
 	}
 
-	@Test
 	public void testPhantomjs(){
 		DesiredCapabilities caps = new DesiredCapabilities();
 		caps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,

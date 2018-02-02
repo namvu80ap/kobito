@@ -1,4 +1,4 @@
-package com.org.kobito.selenium;
+package com.org.kobito.selenium.batchjob.obj;
 public class Marksheet {
 	private String stdId;
 

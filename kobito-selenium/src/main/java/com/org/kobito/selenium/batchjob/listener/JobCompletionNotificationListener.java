@@ -1,9 +1,10 @@
-package com.org.kobito.selenium;
+package com.org.kobito.selenium.batchjob.listener;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.org.kobito.selenium.batchjob.obj.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

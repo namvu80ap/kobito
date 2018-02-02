@@ -1,4 +1,4 @@
-package com.org.kobito.selenium;
+package com.org.kobito.selenium.batchjob.obj;
 
 /**
  * Created by namvu on 18/01/31.
