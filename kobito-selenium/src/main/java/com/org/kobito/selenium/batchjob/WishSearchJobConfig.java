@@ -1,26 +1,26 @@
 package com.org.kobito.selenium.batchjob;
 
-import com.org.kobito.selenium.batchjob.obj.Person;
 import com.org.kobito.selenium.batchjob.obj.WishSearch;
-import com.org.kobito.selenium.batchjob.processor.PersonItemProcessor;
 import com.org.kobito.selenium.batchjob.processor.WishSearchProcessor;
+import com.org.kobito.selenium.dto.Wish;
 import org.openqa.selenium.WebElement;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.data.MongoItemReader;
 import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.FlatFileItemWriter;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
-import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
-import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
 import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Configuration
@@ -37,27 +37,42 @@ public class WishSearchJobConfig extends BatchConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<WishSearch, List<WebElement>> chunk(1)
+                .<Wish, List<WebElement>> chunk(1)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
                 .build();
     }
 
+    @Autowired
+    MongoTemplate mongoTemplate;
+
     @Bean
-    public FlatFileItemReader<WishSearch> reader() {
-        FlatFileItemReader<WishSearch> reader = new FlatFileItemReader<WishSearch>();
-        reader.setResource(new ClassPathResource("data.csv"));
-        reader.setLineMapper(new DefaultLineMapper<WishSearch>() {{
-            setLineTokenizer(new DelimitedLineTokenizer() {{
-                setNames(new String[] { "marketType", "param" });
-            }});
-            setFieldSetMapper(new BeanWrapperFieldSetMapper<WishSearch>() {{
-                setTargetType(WishSearch.class);
-            }});
+    public MongoItemReader<Wish> reader() {
+        MongoItemReader<Wish> reader = new MongoItemReader<Wish>();
+        reader.setTemplate(mongoTemplate);
+        reader.setSort(new HashMap<String, Sort.Direction>() {{
+            put("_id", Sort.Direction.DESC);
         }});
+        reader.setTargetType(Wish.class);
+        reader.setQuery("{}");
         return reader;
     }
+
+//    @Bean
+//    public FlatFileItemReader<WishSearch> reader() {
+//        FlatFileItemReader<WishSearch> reader = new FlatFileItemReader<WishSearch>();
+//        reader.setResource(new ClassPathResource("data.csv"));
+//        reader.setLineMapper(new DefaultLineMapper<WishSearch>() {{
+//            setLineTokenizer(new DelimitedLineTokenizer() {{
+//                setNames(new String[] { "marketType", "param" });
+//            }});
+//            setFieldSetMapper(new BeanWrapperFieldSetMapper<WishSearch>() {{
+//                setTargetType(WishSearch.class);
+//            }});
+//        }});
+//        return reader;
+//    }
 
     @Bean
     public WishSearchProcessor processor() {

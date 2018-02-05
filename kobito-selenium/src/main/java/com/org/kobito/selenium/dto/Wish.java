@@ -13,4 +13,20 @@ public class Wish {
         this.marketType = marketType;
         this.wishParam = wishParam;
     }
+
+    public Integer getMarketType() {
+        return marketType;
+    }
+
+    public void setMarketType(Integer marketType) {
+        this.marketType = marketType;
+    }
+
+    public String getWishParam() {
+        return wishParam;
+    }
+
+    public void setWishParam(String wishParam) {
+        this.wishParam = wishParam;
+    }
 }

@@ -31,10 +31,6 @@ public class KobitoSeleniumApplicationTests {
 	@Test
 	public void contextLoads() {
 //		repository.deleteAll();
-		repository.save(new Wish( 1, "sort_order=price_asc&keyword=camera&category_root=1&category_child=&brand_name=11&brand_id=&size_group=3&price_min=10000&price_max=30000&item_condition_id=1&shipping_payer_id=1&status_trading_sold_out=1" ));
-		repository.save(new Wish( 1, "sort_order=price_asc&keyword=bag&category_root=1&category_child=&brand_name=11&brand_id=&size_group=3&price_min=10000&price_max=30000&item_condition_id=1&shipping_payer_id=1&status_trading_sold_out=1" ));
-		System.out.println("---------------------------------------------");
-		System.out.println(repository.count());
 	}
 
 	public void testGoogle(){
