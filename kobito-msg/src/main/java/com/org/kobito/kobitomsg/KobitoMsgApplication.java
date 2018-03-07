@@ -17,6 +17,8 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.KafkaStreamsDefaultConfiguration;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +42,8 @@ public class KobitoMsgApplication {
 	@RequestMapping("/sendMsg")
 	public String sendMsg() {
 		for (int i = 0; i < 1000; i++) {
-			this.template.sendDefault("10001", "Increase Msg");
+			ListenableFuture<SendResult<String, String>> resultListenableFuture = this.template.send("streamingTopic1","10001", "Increase Msg");
+			//TODO - Handle response result with resultListenableFuture
 		}
 
 		System.out.println("All message send");
@@ -55,32 +58,32 @@ public class KobitoMsgApplication {
 	}
 
 	////////////////////
-//	@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
-//	public StreamsConfig kStreamsConfigs() {
-//		Map<String, Object> props = new HashMap<>();
-//		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.99.100:9092");
-//		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams");
-//		props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
-//		props.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-//		props.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
-//				WallclockTimestampExtractor.class.getName());
-//		return new StreamsConfig(props);
-//	}
-//
-//	@Bean
-//	public KStream<Integer, String> kStream(StreamsBuilder kStreamBuilder) {
-//		KStream<Integer, String> stream = kStreamBuilder.stream("streamingTopic1");
-//		stream
-//				.mapValues(String::toUpperCase)
-//				.groupByKey()
-//				.reduce((String value1, String value2) -> value1 + value2,
-//						TimeWindows.of(1000),
-//						"windowStore")
-//				.toStream()
-//				.map((windowedId, value) -> new KeyValue<>(windowedId.key(), value))
-//				.filter((i, s) -> s.length() > 40)
-//				.to("streamingTopic2");
-//		stream.print();
-//		return stream;
-//	}
+	@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+	public StreamsConfig kStreamsConfigs() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG,"192.168.99.100:9092");
+		props.put(StreamsConfig.APPLICATION_ID_CONFIG, "testStreams");
+		props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
+		props.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+		props.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG,
+				WallclockTimestampExtractor.class.getName());
+		return new StreamsConfig(props);
+	}
+
+	@Bean
+	public KStream<Integer, String> kStream(StreamsBuilder kStreamBuilder) {
+		KStream<Integer, String> stream = kStreamBuilder.stream("streamingTopic1");
+		stream
+				.mapValues(String::toUpperCase)
+				.groupByKey()
+				.reduce((String value1, String value2) -> value1 + value2,
+						TimeWindows.of(1000),
+						"windowStore")
+				.toStream()
+				.map((windowedId, value) -> new KeyValue<>(windowedId.key(), value))
+				.filter((i, s) -> s.length() > 40)
+				.to("streamingTopic2");
+		stream.print();
+		return stream;
+	}
 }
